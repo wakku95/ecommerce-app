@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
 	const [products, setProducts] = useState([]);
@@ -19,14 +20,19 @@ const ProductList = () => {
 					key={product._id}
 					className="bg-white p-4 rounded shadow hover:shadow-lg transition"
 				>
-					{product.image ? (
-						<img
-							src={product.image || "https://placehold.co/150x150?text=No+Image&font=roboto"}
-							alt={product.title}
-							className="w-full h-40 object-cover rounded mb-2"
-						/>
-					) : null}
-					<h3 className="text-lg font-bold">{product.title}</h3>
+					<Link to={`/product/${product._id}`}>
+						{product.image ? (
+							<img
+								src={
+									product.image ||
+									"https://placehold.co/150x150?text=No+Image&font=roboto"
+								}
+								alt={product.title}
+								className="w-full h-40 object-cover rounded mb-2"
+							/>
+						) : null}
+						<h3 className="text-lg font-bold">{product.title}</h3>
+					</Link>
 					<p className="text-sm text-gray-600">{product.description}</p>
 					<p className="text-blue-600 font-semibold mt-1">${product.price}</p>
 				</div>
