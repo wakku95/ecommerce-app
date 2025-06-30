@@ -13,6 +13,7 @@ function Admin() {
 	const [description, setDescription] = useState("");
 	const [image, setImage] = useState("");
 	const [price, setPrice] = useState("");
+	const [category, setCategory] = useState("");
 	const [inStock, setInStock] = useState(true);
 
 	const [products, setProducts] = useState([]);
@@ -56,7 +57,14 @@ function Admin() {
 			const imageUrl = uploadData.url;
 
 			// 2. Add product with image URL
-			const product = { title, description, price, inStock, image: imageUrl };
+			const product = {
+				title,
+				description,
+				category,
+				price,
+				inStock,
+				image: imageUrl,
+			};
 
 			const res = await fetch("http://localhost:5000/api/products", {
 				method: "POST",
@@ -70,10 +78,10 @@ function Admin() {
 			if (!res.ok) throw new Error("Failed to add product");
 
 			const savedProduct = await res.json();
-			console.log("Product saved:", savedProduct);
 
 			setTitle("");
 			setDescription("");
+			setCategory("");
 			setPrice("");
 			setInStock(true);
 			setImageFile(null);
@@ -164,6 +172,17 @@ function Admin() {
 						onChange={(e) => setDescription(e.target.value)}
 						required
 					/>
+					<select
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+						className="w-full p-2 border rounded"
+					>
+						<option value="">Select Category</option>
+						<option value="shoes">Shoes</option>
+						<option value="clothing">Clothing</option>
+						<option value="electronics">Electronics</option>
+						<option value="kids">Kids</option>
+					</select>
 					<input
 						type="file"
 						className="w-full p-2 border rounded"

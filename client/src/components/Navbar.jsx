@@ -1,21 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 function Navbar() {
-	const [user, setUser] = useState(null);
+	//const [user, setUser] = useState(null);
 	const navigate = useNavigate();
+	const { user, logout } = useContext(AuthContext);
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-			setUser(currentUser);
-		});
-		return () => unsubscribe();
-	}, []);
+	// useEffect(() => {
+	// 	const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+	// 		setUser(currentUser);
+	// 	});
+	// 	return () => unsubscribe();
+	// }, []);
 
 	const handleLogout = async () => {
-		await signOut(auth);
+		logout();
+		// await signOut(auth);
 		navigate("/login");
 	};
 
@@ -33,12 +34,19 @@ function Navbar() {
 					<Link to="/cart" className="hover:text-yellow-400">
 						Cart
 					</Link>
+					{user && (
+						<Link to="/my-orders" className="hover:text-yellow-400">
+							My Orders
+						</Link>
+					)}
 
 					{user ? (
 						<>
-							<Link to="/admin" className="hover:text-yellow-400">
-								Admin
-							</Link>
+							{user.isAdmin && (
+								<Link to="/admin" className="hover:text-yellow-400">
+									Admin
+								</Link>
+							)}
 							<button
 								onClick={handleLogout}
 								className="hover:text-red-400 ml-2"

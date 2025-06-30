@@ -4,15 +4,21 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-	const [user, setUser] = useState(null);
-	const [token, setToken] = useState(localStorage.getItem("token"));
+	const [user, setUser] = useState(() => {
+		const storedUser = localStorage.getItem("user");
+		return storedUser ? JSON.parse(storedUser) : null;
+	});
+	const [token, setToken] = useState(() => localStorage.getItem("token"));
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		if (token) {
-			// Auto-login on refresh
-			const storedUser = JSON.parse(localStorage.getItem("user"));
-			setUser(storedUser);
+			const storedUser = localStorage.getItem("user");
+			if (storedUser) {
+				setUser(JSON.parse(storedUser));
+			}
 		}
+		setLoading(false);
 	}, [token]);
 
 	const login = async (email, password) => {
@@ -20,6 +26,7 @@ export function AuthProvider({ children }) {
 			email,
 			password,
 		});
+
 		localStorage.setItem("token", res.data.token);
 		localStorage.setItem("user", JSON.stringify(res.data.user));
 		setToken(res.data.token);
@@ -42,7 +49,16 @@ export function AuthProvider({ children }) {
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, token, login, register, logout }}>
+		<AuthContext.Provider
+			value={{
+				user,
+				token,
+				login,
+				register,
+				logout,
+				loading,
+			}}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

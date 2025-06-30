@@ -5,8 +5,11 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 import ProductDetail from "./pages/ProductDetail";
+import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/MyOrders";
 
 function App() {
 	return (
@@ -18,14 +21,32 @@ function App() {
 				<Route
 					path="/admin"
 					element={
-						<PrivateRoute>
+						<AdminRoute>
 							<Admin />
+						</AdminRoute>
+					}
+					in
+				/>
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/cart" element={<Cart />} />
+				<Route
+					path="/checkout"
+					element={
+						<PrivateRoute>
+							<Checkout />
 						</PrivateRoute>
 					}
 				/>
-				<Route path="/login" element={<Login />} />
-				<Route path="/cart" element={<Cart />} />
-				<Route path="/checkout" element={<Checkout />} />
+
+				<Route
+					path="/my-orders"
+					element={
+						<PrivateRoute>
+							<MyOrders />
+						</PrivateRoute>
+					}
+				/>
 			</Routes>
 		</Router>
 	);

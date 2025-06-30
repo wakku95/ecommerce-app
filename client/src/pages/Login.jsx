@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
 	const { login } = useContext(AuthContext);
@@ -12,7 +12,7 @@ function Login() {
 		e.preventDefault();
 		try {
 			await login(email, password);
-			navigate("/admin"); // or redirect to home
+			navigate("/");
 		} catch (err) {
 			alert("Login failed");
 		}
@@ -41,6 +41,12 @@ function Login() {
 				<button className="w-full bg-blue-600 text-white py-2 rounded">
 					Login
 				</button>
+				<p className="text-sm mt-2">
+					Don't have an account?{" "}
+					<Link to="/register" className="text-blue-600 underline">
+						Register
+					</Link>
+				</p>
 			</form>
 		</div>
 	);

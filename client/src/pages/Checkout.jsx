@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 function Checkout() {
 	const { cart, clearCart } = useContext(CartContext);
+	const { user } = useContext(AuthContext);
 	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
+	const [email] = useState(user?.email || "");
 	const [address, setAddress] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 
@@ -13,9 +15,10 @@ function Checkout() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		const orderData = {
 			name,
-			email,
+			email: user.email,
 			address,
 			items: cart.map((item) => ({
 				productId: item._id,
@@ -56,14 +59,6 @@ function Checkout() {
 					className="p-2 border rounded"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
-					required
-				/>
-				<input
-					type="email"
-					placeholder="Email"
-					className="p-2 border rounded"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
 				<textarea
