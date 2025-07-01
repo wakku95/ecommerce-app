@@ -23,22 +23,26 @@ function ProductDetail() {
 	if (!product) return <div className="text-center mt-10">Loading...</div>;
 
 	return (
-		<div className="max-w-4xl mx-auto p-6">
-			<img
-				src={product.image}
-				alt={product.title}
-				className="w-full h-64 object-cover rounded mb-4"
-			/>
-			<h2 className="text-2xl font-bold mb-2">{product.title}</h2>
-			<p className="text-gray-700 mb-4">{product.description}</p>
-			<p className="text-lg font-semibold mb-6">${product.price}</p>
+		<div className="flex flex-col md:flex-row gap-4 p-4">
+			<div className="w-full md:w-1/2">
+				<img
+					src={product.image}
+					alt={product.title}
+					className="w-full rounded"
+				/>
+			</div>
+			<div className="w-full md:w-1/2 space-y-2">
+				<h2 className="text-2xl font-bold">{product.title}</h2>
+				<p className="text-gray-600">{product.description}</p>
+				<p className="text-lg font-semibold">${product.price}</p>
 
-			<button
-				onClick={() => addToCart(product)}
-				className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-			>
-				Add to Cart
-			</button>
+				<button
+					onClick={() => addToCart(product)}
+					className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+				>
+					Add to Cart
+				</button>
+			</div>
 		</div>
 	);
 }

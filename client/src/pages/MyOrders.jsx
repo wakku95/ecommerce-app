@@ -41,18 +41,36 @@ function MyOrders() {
 			) : (
 				<ul className="space-y-4">
 					{orders.map((order) => (
-						<li key={order._id} className="border p-4 rounded shadow-sm">
-							<p>
-								<strong>Date:</strong>{" "}
-								{new Date(order.createdAt).toLocaleString()}
-							</p>
-							<p>
+						<li
+							key={order._id}
+							className="border p-4 rounded shadow-sm bg-white"
+						>
+							<div className="flex justify-between items-center mb-2">
+								<p className="text-sm text-gray-600">
+									<strong>Date:</strong>{" "}
+									{new Date(order.createdAt).toLocaleString()}
+								</p>
+								<span
+									className={`text-xs px-2 py-1 rounded font-semibold ${
+										order.status === "Completed"
+											? "bg-green-100 text-green-700"
+											: order.status === "Shipped"
+											? "bg-yellow-100 text-yellow-800"
+											: "bg-gray-200 text-gray-800"
+									}`}
+								>
+									{order.status || "Pending"}
+								</span>
+							</div>
+
+							<p className="mb-1">
 								<strong>Total:</strong> ${order.total}
 							</p>
-							<p>
+							<p className="mb-2">
 								<strong>Address:</strong> {order.address}
 							</p>
-							<ul className="mt-2 pl-4 list-disc">
+
+							<ul className="mt-2 pl-4 list-disc text-sm text-gray-700">
 								{order.items.map((item, idx) => (
 									<li key={idx}>
 										{item.title} — ${item.price}

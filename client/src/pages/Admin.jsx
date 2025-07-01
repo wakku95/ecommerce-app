@@ -11,7 +11,6 @@ function Admin() {
 	// Product fields
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [image, setImage] = useState("");
 	const [price, setPrice] = useState("");
 	const [category, setCategory] = useState("");
 	const [inStock, setInStock] = useState(true);
@@ -38,6 +37,21 @@ function Admin() {
 
 	const handleLogout = () => {
 		logout();
+	};
+	const updateOrderStatus = async (orderId, status) => {
+		try {
+			await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({ status }),
+			});
+			fetchOrders(); // Refresh list
+		} catch (err) {
+			alert("Failed to update order status");
+		}
 	};
 
 	const addProduct = async (e) => {
@@ -95,7 +109,14 @@ function Admin() {
 	const fetchProducts = async () => {
 		try {
 			const res = await axios.get("http://localhost:5000/api/products");
-			setProducts(res.data);
+			//setProducts(res.data);
+			const data = res.data;
+			// Handle both: plain array OR paginated object
+			if (Array.isArray(data)) {
+				setProducts(data);
+			} else {
+				setProducts(data.products); // paginated format
+			}
 		} catch (err) {
 			console.error("Failed to fetch products");
 		}
@@ -152,28 +173,27 @@ function Admin() {
 					Logout
 				</button>
 			</div>
-
-			{/* Add Product */}
-			<div className="bg-white p-4 rounded shadow mb-10">
+			<div className="max-w-md mx-auto p-4 bg-white rounded shadow">
 				<h2 className="text-xl font-semibold mb-4">Add Product</h2>
 				<form onSubmit={addProduct} className="space-y-3">
 					<input
 						type="text"
+						required
 						placeholder="Title"
 						className="w-full p-2 border rounded"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						required
 					/>
 					<textarea
+						required
 						placeholder="Description"
 						className="w-full p-2 border rounded"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-						required
 					/>
 					<select
 						value={category}
+						required
 						onChange={(e) => setCategory(e.target.value)}
 						className="w-full p-2 border rounded"
 					>
@@ -185,17 +205,17 @@ function Admin() {
 					</select>
 					<input
 						type="file"
+						required
 						className="w-full p-2 border rounded"
 						onChange={(e) => setImageFile(e.target.files[0])}
-						required
 					/>
 					<input
 						type="number"
+						required
 						placeholder="Price"
 						className="w-full p-2 border rounded"
 						value={price}
 						onChange={(e) => setPrice(e.target.value)}
-						required
 					/>
 					<label className="block">
 						<input
@@ -206,56 +226,10 @@ function Admin() {
 						/>
 						In Stock
 					</label>
-					<button className="bg-green-600 text-white px-4 py-2 rounded">
+					<button className="w-full bg-green-600 text-white px-4 py-2 rounded">
 						Add Product
 					</button>
 				</form>
-			</div>
-
-			{/* Product List */}
-			<div className="mb-10">
-				<h2 className="text-xl font-semibold mb-4">All Products</h2>
-				<div className="grid gap-4 md:grid-cols-2">
-					{products.map((p) => (
-						<div
-							key={p._id}
-							className="p-4 border rounded bg-gray-50 shadow-sm"
-						>
-							<img
-								src={p.image}
-								alt={p.title}
-								className="w-full h-40 object-cover rounded mb-2"
-							/>
-							<h3 className="font-bold">{p.title}</h3>
-							<p className="text-sm">{p.description}</p>
-							<p className="mt-1 font-semibold">Price: ${p.price}</p>
-							<p className="text-xs text-gray-500">
-								{p.inStock ? "In Stock" : "Out of Stock"}
-							</p>
-						</div>
-					))}
-				</div>
-			</div>
-
-			{/* Order List */}
-			<div>
-				<h2 className="text-xl font-semibold mb-4">All Orders</h2>
-				<ul className="space-y-4">
-					{orders.map((order) => (
-						<li
-							key={order._id}
-							className="p-4 border rounded bg-white shadow-sm"
-						>
-							<h3 className="font-bold">{order.name}</h3>
-							<p>Email: {order.email}</p>
-							<p>Address: {order.address}</p>
-							<p>Total: ${order.total}</p>
-							<p className="text-sm text-gray-500">
-								Ordered on: {new Date(order.createdAt).toLocaleString()}
-							</p>
-						</li>
-					))}
-				</ul>
 			</div>
 		</div>
 	);

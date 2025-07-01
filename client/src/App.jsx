@@ -10,6 +10,9 @@ import ProductDetail from "./pages/ProductDetail";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
+import EditProduct from "./pages/EditProduct";
+import AdminProductList from "./pages/AdminProductList";
+import AdminOrders from "./pages/AdminOrders";
 
 function App() {
 	return (
@@ -30,6 +33,30 @@ function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route
+					path="/admin/products"
+					element={
+						<AdminRoute>
+							<AdminProductList />
+						</AdminRoute>
+					}
+				/>
+				<Route
+					path="/admin/orders"
+					element={
+						<AdminRoute>
+							<AdminOrders />
+						</AdminRoute>
+					}
+				/>
+				<Route
+					path="/admin/edit-product/:id"
+					element={
+						<AdminRoute>
+							<EditProduct />
+						</AdminRoute>
+					}
+				/>
 				<Route
 					path="/checkout"
 					element={

@@ -11,25 +11,28 @@ const verifyAdmin = (req, res, next) => {
 	}
 };
 
-// GET /api/products
+// GET /api/products?page=1&limit=10
 router.get("/", async (req, res) => {
 	try {
-		const { keyword, category, minPrice, maxPrice, sort } = req.query;
+		const {
+			keyword,
+			category,
+			minPrice,
+			maxPrice,
+			sort,
+			page = 1,
+			limit = 10,
+		} = req.query;
 
 		let filter = {};
 
-		// Keyword search in title or description
 		if (keyword) {
 			filter.$or = [
 				{ title: { $regex: keyword, $options: "i" } },
 				{ description: { $regex: keyword, $options: "i" } },
 			];
 		}
-
-		if (category) {
-			filter.category = category;
-		}
-
+		if (category) filter.category = category;
 		if (minPrice || maxPrice) {
 			filter.price = {};
 			if (minPrice) filter.price.$gte = Number(minPrice);
@@ -38,12 +41,21 @@ router.get("/", async (req, res) => {
 
 		let query = Product.find(filter);
 
-		// Optional sorting
 		if (sort === "price-asc") query = query.sort({ price: 1 });
 		if (sort === "price-desc") query = query.sort({ price: -1 });
 
-		const products = await query.exec();
-		res.status(200).json(products);
+		const total = await Product.countDocuments(filter);
+		const products = await query
+			.skip((page - 1) * limit)
+			.limit(parseInt(limit))
+			.exec();
+
+		res.status(200).json({
+			products,
+			page: parseInt(page),
+			totalPages: Math.ceil(total / limit),
+			totalItems: total,
+		});
 	} catch (err) {
 		res.status(500).json({ message: "Server error" });
 	}
@@ -76,6 +88,35 @@ router.get("/:id", async (req, res) => {
 		res.json(product);
 	} catch (err) {
 		res.status(500).json({ error: "Server error" });
+	}
+});
+
+// PUT /api/products/:id
+router.put("/:id", verifyToken, verifyAdmin, async (req, res) => {
+	try {
+		const updatedProduct = await Product.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			{ new: true }
+		);
+		if (!updatedProduct) {
+			return res.status(404).json({ message: "Product not found" });
+		}
+		res.json(updatedProduct);
+	} catch (err) {
+		res.status(400).json({ message: "Failed to update product" });
+	}
+});
+// DELETE /api/products/:id
+router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
+	try {
+		const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+		if (!deletedProduct) {
+			return res.status(404).json({ message: "Product not found" });
+		}
+		res.json({ message: "Product deleted successfully" });
+	} catch (err) {
+		res.status(500).json({ message: "Failed to delete product" });
 	}
 });
 

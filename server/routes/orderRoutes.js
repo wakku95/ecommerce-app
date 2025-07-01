@@ -48,5 +48,19 @@ router.post("/", async (req, res) => {
 		res.status(500).json({ error: "Failed to place order" });
 	}
 });
+// PATCH /api/orders/:id/status
+router.patch("/:id/status", verifyToken, verifyAdmin, async (req, res) => {
+	try {
+		const { status } = req.body;
+		const updatedOrder = await Order.findByIdAndUpdate(
+			req.params.id,
+			{ status },
+			{ new: true }
+		);
+		res.json(updatedOrder);
+	} catch (err) {
+		res.status(500).json({ message: "Failed to update status" });
+	}
+});
 
 module.exports = router;
