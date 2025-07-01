@@ -8,7 +8,7 @@ export default function AdminOrders() {
 
 	const fetchOrders = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/orders", {
+			const res = await axios.get("/api/orders", {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			setOrders(res.data);
@@ -24,7 +24,7 @@ export default function AdminOrders() {
 	const updateOrderStatus = async (orderId, status) => {
 		try {
 			await axios.patch(
-				`http://localhost:5000/api/orders/${orderId}/status`,
+				`/api/orders/${orderId}/status`,
 				{ status },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);

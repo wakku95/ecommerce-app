@@ -40,7 +40,7 @@ function Admin() {
 	};
 	const updateOrderStatus = async (orderId, status) => {
 		try {
-			await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+			await fetch(`/api/orders/${orderId}/status`, {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
@@ -62,7 +62,7 @@ function Admin() {
 			const formData = new FormData();
 			formData.append("image", imageFile);
 
-			const uploadRes = await fetch("http://localhost:5000/api/upload", {
+			const uploadRes = await fetch("/api/upload", {
 				method: "POST",
 				body: formData,
 			});
@@ -80,7 +80,7 @@ function Admin() {
 				image: imageUrl,
 			};
 
-			const res = await fetch("http://localhost:5000/api/products", {
+			const res = await fetch("/api/products", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -108,7 +108,7 @@ function Admin() {
 
 	const fetchProducts = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/products");
+			const res = await axios.get("/api/products");
 			//setProducts(res.data);
 			const data = res.data;
 			// Handle both: plain array OR paginated object
@@ -124,7 +124,7 @@ function Admin() {
 
 	const fetchOrders = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/orders", {
+			const res = await axios.get("/api/orders", {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},

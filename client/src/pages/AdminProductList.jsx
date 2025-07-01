@@ -11,7 +11,7 @@ export default function AdminProductList() {
 	// Move fetchProducts outside so it can be reused
 	const fetchProducts = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/products");
+			const res = await axios.get("/api/products");
 			const data = res.data;
 			setProducts(Array.isArray(data) ? data : data.products);
 		} catch (err) {
@@ -26,7 +26,7 @@ export default function AdminProductList() {
 	const handleDelete = async (id) => {
 		if (window.confirm("Delete this product?")) {
 			try {
-				await axios.delete(`http://localhost:5000/api/products/${id}`, {
+				await axios.delete(`/api/products/${id}`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				fetchProducts();
