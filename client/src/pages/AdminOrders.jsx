@@ -24,7 +24,8 @@ export default function AdminOrders() {
 	const updateOrderStatus = async (orderId, status) => {
 		try {
 			await axios.patch(
-				`/api/orders/${orderId}/status`,
+				`
+/api/orders/${orderId}/status`,
 				{ status },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
