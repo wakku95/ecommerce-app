@@ -8,7 +8,9 @@ const ProductList = () => {
 	const fetchProducts = async (filters = {}) => {
 		try {
 			const queryParams = new URLSearchParams(filters).toString();
-			const res = await fetch(`/api/products?${queryParams}`);
+			const res = await fetch(
+				`https://ecommerce-app-qi50.onrender.com/api/products?${queryParams}`
+			);
 			const data = await res.json();
 
 			// Make sure to extract the correct array

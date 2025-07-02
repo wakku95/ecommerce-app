@@ -11,7 +11,9 @@ function ProductDetail() {
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				const res = await axios.get(`/api/products/${id}`);
+				const res = await axios.get(
+					`https://ecommerce-app-qi50.onrender.com/api/products/${id}`
+				);
 				setProduct(res.data);
 			} catch (err) {
 				console.error("Product not found");

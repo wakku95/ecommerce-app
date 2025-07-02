@@ -14,7 +14,7 @@ function EditProduct() {
 	});
 
 	useEffect(() => {
-		fetch(`/api/products/${id}`)
+		fetch(`https://ecommerce-app-qi50.onrender.com/api/products/${id}`)
 			.then((res) => res.json())
 			.then((data) => setProduct(data));
 	}, [id]);
@@ -28,7 +28,7 @@ function EditProduct() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await fetch(`/api/products/${id}`, {
+		await fetch(`https://ecommerce-app-qi50.onrender.com/api/products/${id}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

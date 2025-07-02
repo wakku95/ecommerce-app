@@ -8,9 +8,12 @@ export default function AdminOrders() {
 
 	const fetchOrders = async () => {
 		try {
-			const res = await axios.get("/api/orders", {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			const res = await axios.get(
+				"https://ecommerce-app-qi50.onrender.com/api/orders",
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
 			setOrders(res.data);
 		} catch (err) {
 			console.error("Failed to fetch orders");
@@ -25,7 +28,7 @@ export default function AdminOrders() {
 		try {
 			await axios.patch(
 				`
-/api/orders/${orderId}/status`,
+https://ecommerce-app-qi50.onrender.com/api/orders/${orderId}/status`,
 				{ status },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);

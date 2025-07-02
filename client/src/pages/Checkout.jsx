@@ -30,7 +30,10 @@ function Checkout() {
 		};
 
 		try {
-			await axios.post("/api/orders", orderData);
+			await axios.post(
+				"https://ecommerce-app-qi50.onrender.com/api/orders",
+				orderData
+			);
 			clearCart();
 			setSubmitted(true);
 		} catch (err) {

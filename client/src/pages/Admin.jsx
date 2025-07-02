@@ -40,14 +40,17 @@ function Admin() {
 	};
 	const updateOrderStatus = async (orderId, status) => {
 		try {
-			await fetch(`/api/orders/${orderId}/status`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({ status }),
-			});
+			await fetch(
+				`https://ecommerce-app-qi50.onrender.com/api/orders/${orderId}/status`,
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({ status }),
+				}
+			);
 			fetchOrders(); // Refresh list
 		} catch (err) {
 			alert("Failed to update order status");
@@ -62,10 +65,13 @@ function Admin() {
 			const formData = new FormData();
 			formData.append("image", imageFile);
 
-			const uploadRes = await fetch("/api/upload", {
-				method: "POST",
-				body: formData,
-			});
+			const uploadRes = await fetch(
+				"https://ecommerce-app-qi50.onrender.com/api/upload",
+				{
+					method: "POST",
+					body: formData,
+				}
+			);
 
 			const uploadData = await uploadRes.json();
 			const imageUrl = uploadData.url;
@@ -80,14 +86,17 @@ function Admin() {
 				image: imageUrl,
 			};
 
-			const res = await fetch("/api/products", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`, // if using protected route
-				},
-				body: JSON.stringify(product),
-			});
+			const res = await fetch(
+				"https://ecommerce-app-qi50.onrender.com/api/products",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`, // if using protected route
+					},
+					body: JSON.stringify(product),
+				}
+			);
 
 			if (!res.ok) throw new Error("Failed to add product");
 
@@ -108,7 +117,9 @@ function Admin() {
 
 	const fetchProducts = async () => {
 		try {
-			const res = await axios.get("/api/products");
+			const res = await axios.get(
+				"https://ecommerce-app-qi50.onrender.com/api/products"
+			);
 			//setProducts(res.data);
 			const data = res.data;
 			// Handle both: plain array OR paginated object
@@ -124,11 +135,14 @@ function Admin() {
 
 	const fetchOrders = async () => {
 		try {
-			const res = await axios.get("/api/orders", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
+			const res = await axios.get(
+				"https://ecommerce-app-qi50.onrender.com/api/orders",
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 			setOrders(res.data);
 		} catch (err) {
 			console.error("Failed to fetch orders");
